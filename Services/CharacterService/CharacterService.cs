@@ -1,39 +1,34 @@
 using AutoMapper;
+using dotnetRpgApi.Data;
 using dotnetRpgApi.Dtos.Character;
-using dotnetRpgApi.Enums;
 using dotnetRpgApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace dotnetRpgApi.Services.CharacterService
 {
     public class CharacterService : ICharacterService
     {
-        private List<Character> characters = new List<Character>
-        {
-            new Character { Id = 1, Name = "Eldron", HitPoints = 100, Strength = 15, Defense = 10, Intelligence = 20, Class = RpgClass.Mage },
-            new Character { Id = 2, Name = "Lyanna", HitPoints = 80, Strength = 10, Defense = 12, Intelligence = 18, Class = RpgClass.Warrior },
-            new Character { Id = 3, Name = "Thorn", HitPoints = 120, Strength = 18, Defense = 8, Intelligence = 12, Class = RpgClass.Rogue },
-            new Character { Id = 4, Name = "Sylvia", HitPoints = 90, Strength = 12, Defense = 15, Intelligence = 16, Class = RpgClass.Archer }
-        };
         private readonly IMapper _mapper;
+        private readonly DataContext _context;
 
-        public CharacterService(IMapper mapper)
+        public CharacterService(IMapper mapper, DataContext context)
         {
             _mapper = mapper;
+            _context = context;
         }
 
         public async Task<ServiceResponse<List<CharacterResponseDto>>> GetAll()
         {
-            var serviceResponse = new ServiceResponse<List<CharacterResponseDto>>
-            {
-                Data = characters.Select(c => _mapper.Map<CharacterResponseDto>(c)).ToList()
-            };
+            var serviceResponse = new ServiceResponse<List<CharacterResponseDto>>();
+            var characters = await _context.Characters.ToListAsync();
+            serviceResponse.Data = characters.Select(c => _mapper.Map<CharacterResponseDto>(c)).ToList();
             return serviceResponse;
         }
 
         public async Task<ServiceResponse<CharacterResponseDto>> GetOneById(int id)
         {
             var serviceResponse = new ServiceResponse<CharacterResponseDto>();
-            var findCharacter = characters.FirstOrDefault(c => c.Id == id);
+            var findCharacter = await _context.Characters.FirstOrDefaultAsync(c => c.Id == id);
 
             if (findCharacter is null)
             {
@@ -50,10 +45,11 @@ namespace dotnetRpgApi.Services.CharacterService
         {
             var serviceResponse = new ServiceResponse<List<CharacterResponseDto>>();
             var newCharacter = _mapper.Map<Character>(character);
-            newCharacter.Id = characters.Max(c => c.Id) + 1;
 
-            characters.Add(newCharacter);
-            serviceResponse.Data = characters.Select(c => _mapper.Map<CharacterResponseDto>(c)).ToList();
+            _context.Characters.Add(newCharacter);
+            await _context.SaveChangesAsync();
+
+            serviceResponse.Data = await _context.Characters.Select(c => _mapper.Map<CharacterResponseDto>(c)).ToListAsync();
 
             return serviceResponse;
         }
@@ -62,7 +58,7 @@ namespace dotnetRpgApi.Services.CharacterService
         {
             var serviceResponse = new ServiceResponse<CharacterResponseDto>();
 
-            var findCharacter = characters.FirstOrDefault(c => c.Id == character.Id);
+            var findCharacter = await _context.Characters.FirstOrDefaultAsync(c => c.Id == character.Id);
 
             if (findCharacter is null)
             {
@@ -77,7 +73,10 @@ namespace dotnetRpgApi.Services.CharacterService
             findCharacter.Defense = character.Defense;
             findCharacter.Class = character.Class;
 
+            await _context.SaveChangesAsync();
+
             serviceResponse.Data = _mapper.Map<CharacterResponseDto>(character);
+
             return serviceResponse;
         }
 
@@ -85,7 +84,7 @@ namespace dotnetRpgApi.Services.CharacterService
         {
             var serviceResponse = new ServiceResponse<List<CharacterResponseDto>>();
 
-            var findCharacter = characters.First(c => c.Id == id);
+            var findCharacter = await _context.Characters.FirstOrDefaultAsync(c => c.Id == id);
 
             if (findCharacter is null)
             {
@@ -94,8 +93,10 @@ namespace dotnetRpgApi.Services.CharacterService
                 return serviceResponse;
             }
 
-            characters.Remove(findCharacter);
-            serviceResponse.Data = characters.Select(c => _mapper.Map<CharacterResponseDto>(c)).ToList();
+            _context.Characters.Remove(findCharacter);
+            await _context.SaveChangesAsync();
+
+            serviceResponse.Data = await _context.Characters.Select(c => _mapper.Map<CharacterResponseDto>(c)).ToListAsync();
             
             return serviceResponse;
         }
