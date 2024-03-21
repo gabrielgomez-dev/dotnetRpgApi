@@ -11,5 +11,6 @@ namespace dotnetRpgApi.Models
         public int Defense { get; set; } = 1;
         public int Intelligence { get; set; } = 1;
         public RpgClass Class { get; set; } = RpgClass.Warrior;
+        public User? user { get; set; }
     }
 }
