@@ -1,3 +1,5 @@
+using dotnetRpgApi.Dtos.Skill;
+using dotnetRpgApi.Dtos.Weapon;
 using dotnetRpgApi.Enums;
 
 namespace dotnetRpgApi.Dtos.Character
@@ -11,5 +13,7 @@ namespace dotnetRpgApi.Dtos.Character
         public int Defense { get; set; } = 1;
         public int Intelligence { get; set; } = 1;
         public RpgClass Class { get; set; } = RpgClass.Warrior;
+        public GetWeaponDto? Weapon { get; set; }
+        public List<GetSkillDto>? Skills { get; set; }
     }
 }

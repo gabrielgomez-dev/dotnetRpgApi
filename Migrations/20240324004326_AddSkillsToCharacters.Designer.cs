@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using dotnetRpgApi.Data;
 
@@ -11,9 +12,11 @@ using dotnetRpgApi.Data;
 namespace dotnetRpgApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240324004326_AddSkillsToCharacters")]
+    partial class AddSkillsToCharacters
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,13 +51,7 @@ namespace dotnetRpgApi.Migrations
                     b.Property<int>("Class")
                         .HasColumnType("int");
 
-                    b.Property<int>("Defeats")
-                        .HasColumnType("int");
-
                     b.Property<int>("Defense")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Fights")
                         .HasColumnType("int");
 
                     b.Property<int>("HitPoints")
@@ -71,9 +68,6 @@ namespace dotnetRpgApi.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Victories")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -101,38 +95,6 @@ namespace dotnetRpgApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Skills");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Damage = 10,
-                            Name = "Fireball"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Damage = 30,
-                            Name = "Giant Fireball"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Damage = 60,
-                            Name = "Explosive Fireball"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Damage = 20,
-                            Name = "Lightning Strike"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Damage = 40,
-                            Name = "Giant Lightning Strike"
-                        });
                 });
 
             modelBuilder.Entity("dotnetRpgApi.Models.User", b =>

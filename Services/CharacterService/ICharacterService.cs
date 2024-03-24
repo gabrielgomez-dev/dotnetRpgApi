@@ -9,5 +9,6 @@ namespace dotnetRpgApi.Services.CharacterService
         Task<ServiceResponse<List<CharacterResponseDto>>> Save(CharacterRequestDto character);
         Task<ServiceResponse<CharacterResponseDto>> Update(CharacterRequestDto character);
         Task<ServiceResponse<List<CharacterResponseDto>>> Delete(int id);
+        Task<ServiceResponse<CharacterResponseDto>> AddCharacterSkill(AddCharacterSkillDto skill);
     }
 }

@@ -12,8 +12,8 @@ using dotnetRpgApi.Data;
 namespace dotnetRpgApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240321182847_AddUserCharactersRelationship")]
-    partial class AddUserCharactersRelationship
+    [Migration("20240323003522_AddWeapons")]
+    partial class AddWeapons
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -87,13 +87,55 @@ namespace dotnetRpgApi.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("dotnetRpgApi.Models.Weapon", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CharacterId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Damage")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CharacterId")
+                        .IsUnique();
+
+                    b.ToTable("Weapons");
+                });
+
             modelBuilder.Entity("dotnetRpgApi.Models.Character", b =>
                 {
-                    b.HasOne("dotnetRpgApi.Models.User", "user")
+                    b.HasOne("dotnetRpgApi.Models.User", "User")
                         .WithMany("Characters")
                         .HasForeignKey("UserId");
 
-                    b.Navigation("user");
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("dotnetRpgApi.Models.Weapon", b =>
+                {
+                    b.HasOne("dotnetRpgApi.Models.Character", "Character")
+                        .WithOne("Weapon")
+                        .HasForeignKey("dotnetRpgApi.Models.Weapon", "CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Character");
+                });
+
+            modelBuilder.Entity("dotnetRpgApi.Models.Character", b =>
+                {
+                    b.Navigation("Weapon");
                 });
 
             modelBuilder.Entity("dotnetRpgApi.Models.User", b =>

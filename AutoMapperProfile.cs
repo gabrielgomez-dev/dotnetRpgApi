@@ -1,5 +1,7 @@
 using AutoMapper;
 using dotnetRpgApi.Dtos.Character;
+using dotnetRpgApi.Dtos.Skill;
+using dotnetRpgApi.Dtos.Weapon;
 using dotnetRpgApi.Models;
 
 namespace dotnetRpgApi
@@ -8,8 +10,10 @@ namespace dotnetRpgApi
     {
         public AutoMapperProfile()
         {
-            CreateMap<Character, CharacterResponseDto>(); // convert character to response
-            CreateMap<CharacterRequestDto, Character>(); // convert request character to a character
+            CreateMap<Character, CharacterResponseDto>(); 
+            CreateMap<CharacterRequestDto, Character>(); 
+            CreateMap<Weapon, GetWeaponDto>();
+            CreateMap<Skill, GetSkillDto>();
         }
     }
 }

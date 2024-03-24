@@ -11,20 +11,20 @@ namespace dotnetRpgApi.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
-                name: "userId",
+                name: "UserId",
                 table: "Characters",
                 type: "int",
                 nullable: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Characters_userId",
+                name: "IX_Characters_UserId",
                 table: "Characters",
-                column: "userId");
+                column: "UserId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Characters_Users_userId",
+                name: "FK_Characters_Users_UserId",
                 table: "Characters",
-                column: "userId",
+                column: "UserId",
                 principalTable: "Users",
                 principalColumn: "Id");
         }
@@ -33,15 +33,15 @@ namespace dotnetRpgApi.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Characters_Users_userId",
+                name: "FK_Characters_Users_UserId",
                 table: "Characters");
 
             migrationBuilder.DropIndex(
-                name: "IX_Characters_userId",
+                name: "IX_Characters_UserId",
                 table: "Characters");
 
             migrationBuilder.DropColumn(
-                name: "userId",
+                name: "UserId",
                 table: "Characters");
         }
     }

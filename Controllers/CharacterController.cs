@@ -1,10 +1,13 @@
+using System.Security.Claims;
 using dotnetRpgApi.Dtos.Character;
 using dotnetRpgApi.Services;
 using dotnetRpgApi.Services.CharacterService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace dotnetRpgApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CharacterController : ControllerBase
@@ -39,20 +42,35 @@ namespace dotnetRpgApi.Controllers
         {
             var response = await _characterService.Update(character);
 
-            if (response.Data is null) {
+            if (response.Data is null)
+            {
                 return NotFound(response);
             }
 
             return Ok(response);
         }
-        
+
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<ServiceResponse<CharacterResponseDto>>> Delete(int id)
         {
             var response = await _characterService.Delete(id);
 
-            if (response.Data is null) {
+            if (response.Data is null)
+            {
+                return NotFound(response);
+            }
+
+            return Ok(response);
+        }
+
+        [HttpPost("Skill")]
+        public async Task<ActionResult<ServiceResponse<CharacterResponseDto>>> AddCharacterSkill(AddCharacterSkillDto skill)
+        {
+            var response = await _characterService.AddCharacterSkill(skill);
+
+            if (response.Data is null)
+            {
                 return NotFound(response);
             }
 
